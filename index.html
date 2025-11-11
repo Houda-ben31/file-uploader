@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>أداة رفع الملفات</title>
+<style>
+body {font-family: Tahoma; direction: rtl; background:#f6f6f6; padding:20px;}
+.container {max-width: 700px; margin:auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px #ccc;}
+.tabs {display:flex; justify-content:space-around; margin-bottom:20px;}
+.tabs button {padding:10px 20px; border:none; background:#eee; cursor:pointer; font-weight:bold;}
+.tabs button.active {background:#4CAF50; color:white;}
+.box {display:none;}
+.box.active {display:block;}
+input[type="file"], input[type="text"] {width:100%; padding:10px; margin:5px 0;}
+button.submit {padding:10px 15px; background:#4CAF50; color:white; border:none; cursor:pointer; border-radius:5px;}
+button.submit:disabled {background:#999; cursor:not-allowed;}
+</style>
+<script>
+function switchTab(tab){
+  document.getElementById('local-box').classList.toggle('active', tab === 'local');
+  document.getElementById('url-box').classList.toggle('active', tab === 'url');
+  document.getElementById('btn-local').classList.toggle('active', tab === 'local');
+  document.getElementById('btn-url').classList.toggle('active', tab === 'url');
+}
+function acceptTerms(btn, chk){
+  document.getElementById(btn).disabled = !document.getElementById(chk).checked;
+}
+</script>
+</head>
+<body>
+
+<div class="container">
+  <h2>🗂️ أداة رفع الملفات</h2>
+  
+  <div class="tabs">
+    <button id="btn-local" class="active" onclick="switchTab('local')">رفع من جهازك</button>
+    <button id="btn-url" onclick="switchTab('url')">سحب من رابط</button>
+  </div>
+
+  <!-- رفع من الجهاز -->
+  <div class="box active" id="local-box">
+    <form action="upload.php" method="post" enctype="multipart/form-data">
+      <input type="file" name="files[]" multiple required>
+      <label><input type="checkbox" id="agree1" onclick="acceptTerms('uploadBtn','agree1')"> أوافق على الشروط</label><br>
+      <button class="submit" id="uploadBtn" disabled>رفع الملفات</button>
+    </form>
+  </div>
+
+  <!-- رفع من رابط -->
+  <div class="box" id="url-box">
+    <form action="fetch.php" method="post">
+      <input type="text" name="url" placeholder="ضع الرابط هنا مثل https://example.com/file.zip" required>
+      <label><input type="checkbox" id="agree2" onclick="acceptTerms('fetchBtn','agree2')"> أوافق على الشروط</label><br>
+      <button class="submit" id="fetchBtn" disabled>سحب الملف من الرابط</button>
+    </form>
+  </div>
+
+</div>
+
+</body>
+</html>
